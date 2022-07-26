@@ -46,4 +46,16 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       })
       .catch((error) => console.log(error));
   });
+
+  app.delete('/flows/remove:id', (req, res) => {
+    flowCollection
+      .deleteOne({ _id: ObjectId(req.params.id) })
+      .then((result) => {
+        res.json('Flow deleted');
+      })
+      .catch((error) => console.log(error));
+  });
+
+  //TODO-build update functionality
+  app.put('/flows', (req, res) => {});
 });
