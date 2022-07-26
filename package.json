@@ -1,0 +1,27 @@
+{
+  "name": "dev-yoga-api",
+  "version": "1.0.0",
+  "description": "API to save yoga flows",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DuranAgustin/dev-yoga-api.git"
+  },
+  "author": "Kaitlyn Fernelius, Agustin Duran, Nina Moreno",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DuranAgustin/dev-yoga-api/issues"
+  },
+  "homepage": "https://github.com/DuranAgustin/dev-yoga-api#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "express-validator": "^6.14.2",
+    "mongodb": "^4.8.1",
+    "mongoose": "^6.4.7"
+  }
+}
