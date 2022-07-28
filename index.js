@@ -17,10 +17,10 @@ const { requiresAuth } = pkg;
 //   issuerBaseURL: 'https://dev-2-v7g820.us.auth0.com',
 // };
 
-// const app = express();
-// const PORT = process.env.PORT || 3000;
-// const CONNECTION_STRING =
-//   'mongodb+srv://kferne3:Violanerd12!@yoga-flow.g11hl.mongodb.net/?retryWrites=true&w=majority';
+const app = express();
+const PORT = process.env.PORT || 3000;
+const CONNECTION_STRING =
+  'mongodb+srv://kferne3:Violanerd12!@yoga-flow.g11hl.mongodb.net/?retryWrites=true&w=majority';
 
 // //MIDDLEWARE//
 
