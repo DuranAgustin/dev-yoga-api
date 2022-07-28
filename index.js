@@ -100,7 +100,6 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       .insertOne(req.body)
       .then((result) => {
         res.send(result);
-        res.redirect('/');
       })
       .catch((error) => console.log(error));
   });
