@@ -62,20 +62,11 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       .catch((error) => console.log(error));
   });
 
-  app.delete("/flows/remove:id", (req, res) => {
-    flowCollection
-      .deleteOne({ _id: ObjectId(req.params.id) })
-      .then((result) => {
-        res.json("Flow deleted");
-      })
-      .catch((error) => console.log(error));
-  });
-
   //TODO-build update functionality
-  app.put("/:id", (req, res, next) => {
+  app.put("/flows/update:id", (req, res) => {
     flowCollection
       .findOneAndUpdate(
-        { _id: req.params.id },
+        { _id: ObjectId(req.params.id) },
         {
           $set: {
             title: req.body.title,
@@ -86,7 +77,7 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
           upsert: true,
         }
       )
-      .then((result) => res.json("Success"))
+      .then((result) => res.json("Success" + result))
       .catch((error) => console.error(error));
   });
 });
