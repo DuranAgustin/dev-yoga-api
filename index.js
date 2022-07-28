@@ -144,6 +144,15 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       .catch((error) => console.error(error));
   });
 
+  app.get('/user/email:email', (req, res) => {
+    userCollection
+      .findOne({ email: req.params.email })
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((error) => console.error(error));
+  });
+
   app.post('/user', (req, res) => {
     userCollection
       .insertOne(req.body)
