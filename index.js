@@ -79,6 +79,7 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
         {
           $set: {
             title: req.body.title,
+            flow: req.body.flow,
           },
         },
         {
