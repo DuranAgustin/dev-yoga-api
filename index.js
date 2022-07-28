@@ -28,12 +28,19 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       .find()
       .toArray()
       .then((results) => {
-        console.log(results);
         res.send(results);
       })
       .catch((error) => console.error(error));
   });
 
+  app.get('/flows/find:id', (req, res) => {
+    flowCollection
+      .findOne({ _id: ObjectId(req.params.id) })
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((error) => console.error(error));
+  });
   //TODO-Add validation to the post method so that flows posted in there include the necessary data
   //TODO-figure out routes and mongoose for the get/post/delete
 
