@@ -29,7 +29,7 @@ const CONNECTION_STRING =
 // });
 
 // auth router attaches /login, /logout, and /callback routes to the baseURL
-app.use(auth(config));
+// app.use(auth(config));
 app.use(cors());
 app.use(express.json());
 
