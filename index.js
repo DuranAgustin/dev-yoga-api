@@ -99,12 +99,11 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
     flowCollection
       .insertOne(req.body)
       .then((result) => {
-        console.log(result);
+        res.send(result);
         res.redirect('/');
       })
       .catch((error) => console.log(error));
   });
-
 
   app.delete('/flows/remove:id', (req, res) => {
     flowCollection
