@@ -1,13 +1,13 @@
-'use strict';
+"use strict";
 
-import express from 'express';
-import cors from 'cors';
-import { MongoClient, ObjectId } from 'mongodb';
+import express from "express";
+import cors from "cors";
+import { MongoClient, ObjectId } from "mongodb";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const CONNECTION_STRING =
-  'mongodb+srv://kferne3:Violanerd12!@yoga-flow.g11hl.mongodb.net/?retryWrites=true&w=majority';
+  "mongodb+srv://kferne3:Violanerd12!@yoga-flow.g11hl.mongodb.net/?retryWrites=true&w=majority";
 
 //MIDDLEWARE//
 app.use(cors());
@@ -18,13 +18,13 @@ app.listen(PORT, () => {
 });
 
 MongoClient.connect(CONNECTION_STRING).then(async (client) => {
-  console.log('Connected to database...');
-  const db = client.db('flows');
-  const flowCollection = db.collection('saved-flows');
+  console.log("Connected to database...");
+  const db = client.db("flows");
+  const flowCollection = db.collection("saved-flows");
 
-  app.get('/', async (req, res) => {
+  app.get("/", async (req, res) => {
     await db
-      .collection('saved-flows')
+      .collection("saved-flows")
       .find()
       .toArray()
       .then((results) => {
@@ -33,7 +33,15 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       .catch((error) => console.error(error));
   });
 
-  app.get('/flows/find:id', (req, res) => {
+  app.get("/flows/find:id", (req, res) => {
+    flowCollection
+      .findOne({ _id: ObjectId(req.params.id) })
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((error) => console.error(error));
+  });
+  app.get("/:id", (req, res) => {
     flowCollection
       .findOne({ _id: ObjectId(req.params.id) })
       .then((result) => {
@@ -44,25 +52,41 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
   //TODO-Add validation to the post method so that flows posted in there include the necessary data
   //TODO-figure out routes and mongoose for the get/post/delete
 
-  app.post('/flows', (req, res) => {
+  app.post("/flows", (req, res) => {
     flowCollection
       .insertOne(req.body)
       .then((result) => {
         console.log(result);
-        res.redirect('/');
+        res.redirect("/");
       })
       .catch((error) => console.log(error));
   });
 
-  app.delete('/flows/remove:id', (req, res) => {
+  app.delete("/flows/remove:id", (req, res) => {
     flowCollection
       .deleteOne({ _id: ObjectId(req.params.id) })
       .then((result) => {
-        res.json('Flow deleted');
+        res.json("Flow deleted");
       })
       .catch((error) => console.log(error));
   });
 
   //TODO-build update functionality
-  app.put('/flows', (req, res) => {});
+  app.put("/:id", (req, res, next) => {
+    flowCollection
+      .findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          $set: {
+            title: req.body.title,
+            flow: req.body.flow,
+          },
+        },
+        {
+          upsert: true,
+        }
+      )
+      .then((result) => res.json("Success"))
+      .catch((error) => console.error(error));
+  });
 });
