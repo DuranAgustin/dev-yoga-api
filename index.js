@@ -45,11 +45,15 @@ app.listen(PORT, () => {
   console.log(`listening on ${PORT}`);
 });
 
+//TODO-WE NEED VALIDATION
 MongoClient.connect(CONNECTION_STRING).then(async (client) => {
   console.log('Connected to database...');
   const db = client.db('flows');
   const flowCollection = db.collection('saved-flows');
+  const userCollection = db.collection('users');
 
+  //------FLOW API CRUD CALLS-------//
+  //-------------------------------//
   app.get('/', async (req, res) => {
     await db
       .collection('saved-flows')
@@ -69,6 +73,7 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       })
       .catch((error) => console.error(error));
   });
+
   app.get('/:id', (req, res) => {
     flowCollection
       .findOne({ _id: ObjectId(req.params.id) })
@@ -77,9 +82,8 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       })
       .catch((error) => console.error(error));
   });
-  //TODO-Add validation to the post method so that flows posted in there include the necessary data
-  //TODO-figure out routes and mongoose for the get/post/delete
 
+  //
   app.post('/flows', (req, res) => {
     flowCollection
       .insertOne(req.body)
@@ -116,5 +120,37 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       )
       .then((result) => res.json('Success'))
       .catch((error) => console.error(error));
+  });
+
+  //--------USER API CRUD CALLS-------//
+  //---------------------------------//
+  app.get('/user', async (req, res) => {
+    await db
+      .collection('users')
+      .find()
+      .toArray()
+      .then((results) => {
+        res.send(results);
+      })
+      .catch((error) => console.error(error));
+  });
+
+  app.get('/user/find:id', (req, res) => {
+    userCollection
+      .findOne({ _id: ObjectId(req.params.id) })
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((error) => console.error(error));
+  });
+
+  app.post('/user', (req, res) => {
+    userCollection
+      .insertOne(req.body)
+      .then((result) => {
+        console.log(result);
+        res.redirect('/');
+      })
+      .catch((error) => console.log(error));
   });
 });
