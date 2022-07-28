@@ -83,6 +83,17 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       .catch((error) => console.error(error));
   });
 
+  app.get('/flows/userId:id', (req, res) => {
+    flowCollection
+      .find({ userId: req.params.id })
+      .toArray()
+      .then((results) => {
+        res.send(results);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
   //
   app.post('/flows', (req, res) => {
     flowCollection
