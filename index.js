@@ -33,7 +33,15 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       .catch((error) => console.error(error));
   });
 
-  app.get('/flows/find:id', (req, res) => {
+  app.get("/flows/find:id", (req, res) => {
+    flowCollection
+      .findOne({ _id: ObjectId(req.params.id) })
+      .then((result) => {
+        res.send(result);
+      })
+      .catch((error) => console.error(error));
+  });
+  app.get("/:id", (req, res) => {
     flowCollection
       .findOne({ _id: ObjectId(req.params.id) })
       .then((result) => {
@@ -64,5 +72,20 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
   });
 
   //TODO-build update functionality
-  app.put("/flows", (req, res) => {});
+  app.put("/:id", (req, res, next) => {
+    flowCollection
+      .findOneAndUpdate(
+        { _id: req.params.id },
+        {
+          $set: {
+            title: req.body.title,
+          },
+        },
+        {
+          upsert: true,
+        }
+      )
+      .then((result) => res.json("Success"))
+      .catch((error) => console.error(error));
+  });
 });
