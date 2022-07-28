@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
-import express from 'express';
-import cors from 'cors';
-import { MongoClient, ObjectId } from 'mongodb';
+import express from "express";
+import cors from "cors";
+import { MongoClient, ObjectId } from "mongodb";
 
-import { auth } from 'express-openid-connect';
-import pkg from 'express-openid-connect';
+import { auth } from "express-openid-connect";
+import pkg from "express-openid-connect";
 const { requiresAuth } = pkg;
 
 // const config = {
@@ -20,7 +20,7 @@ const { requiresAuth } = pkg;
 const app = express();
 const PORT = process.env.PORT || 3000;
 const CONNECTION_STRING =
-  'mongodb+srv://kferne3:Violanerd12!@yoga-flow.g11hl.mongodb.net/?retryWrites=true&w=majority';
+  "mongodb+srv://kferne3:Violanerd12!@yoga-flow.g11hl.mongodb.net/?retryWrites=true&w=majority";
 
 // //MIDDLEWARE//
 
@@ -47,16 +47,16 @@ app.listen(PORT, () => {
 
 //TODO-WE NEED VALIDATION
 MongoClient.connect(CONNECTION_STRING).then(async (client) => {
-  console.log('Connected to database...');
-  const db = client.db('flows');
-  const flowCollection = db.collection('saved-flows');
-  const userCollection = db.collection('users');
+  console.log("Connected to database...");
+  const db = client.db("flows");
+  const flowCollection = db.collection("saved-flows");
+  const userCollection = db.collection("users");
 
   //------FLOW API CRUD CALLS-------//
   //-------------------------------//
-  app.get('/', async (req, res) => {
+  app.get("/", async (req, res) => {
     await db
-      .collection('saved-flows')
+      .collection("saved-flows")
       .find()
       .toArray()
       .then((results) => {
@@ -65,7 +65,7 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       .catch((error) => console.error(error));
   });
 
-  app.get('/flows/find:id', (req, res) => {
+  app.get("/flows/find:id", (req, res) => {
     flowCollection
       .findOne({ _id: ObjectId(req.params.id) })
       .then((result) => {
@@ -74,7 +74,7 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       .catch((error) => console.error(error));
   });
 
-  app.get('/:id', (req, res) => {
+  app.get("/:id", (req, res) => {
     flowCollection
       .findOne({ _id: ObjectId(req.params.id) })
       .then((result) => {
@@ -95,28 +95,36 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       });
   });
   //
-  app.post('/flows', (req, res) => {
+  app.post("/flows", (req, res) => {
     flowCollection
       .insertOne(req.body)
       .then((result) => {
         console.log(result);
-        res.redirect('/');
+        res.redirect("/");
       })
       .catch((error) => console.log(error));
   });
 
-
-  app.delete('/flows/remove:id', (req, res) => {
+  app.delete("/flows/remove:id", (req, res) => {
     flowCollection
       .deleteOne({ _id: ObjectId(req.params.id) })
       .then((result) => {
-        res.json('Flow deleted');
+        res.json("Flow deleted");
+      })
+      .catch((error) => console.log(error));
+  });
+
+  app.delete("/flows/remove:id", (req, res) => {
+    flowCollection
+      .deleteOne({ _id: ObjectId(req.params.id) })
+      .then((result) => {
+        res.json("Flow deleted");
       })
       .catch((error) => console.log(error));
   });
 
   //TODO-build update functionality
-  app.put('/:id', (req, res, next) => {
+  app.put("/:id", (req, res, next) => {
     flowCollection
       .findOneAndUpdate(
         { _id: ObjectId(req.params.id) },
@@ -130,15 +138,15 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
           upsert: true,
         }
       )
-      .then((result) => res.json('Success'))
+      .then((result) => res.json("Success"))
       .catch((error) => console.error(error));
   });
 
   //--------USER API CRUD CALLS-------//
   //---------------------------------//
-  app.get('/user', async (req, res) => {
+  app.get("/user", async (req, res) => {
     await db
-      .collection('users')
+      .collection("users")
       .find()
       .toArray()
       .then((results) => {
@@ -147,7 +155,7 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       .catch((error) => console.error(error));
   });
 
-  app.get('/user/find:id', (req, res) => {
+  app.get("/user/find:id", (req, res) => {
     userCollection
       .findOne({ _id: ObjectId(req.params.id) })
       .then((result) => {
@@ -156,7 +164,7 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       .catch((error) => console.error(error));
   });
 
-  app.get('/user/email:email', (req, res) => {
+  app.get("/user/email:email", (req, res) => {
     userCollection
       .findOne({ email: req.params.email })
       .then((result) => {
@@ -165,12 +173,12 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       .catch((error) => console.error(error));
   });
 
-  app.post('/user', (req, res) => {
+  app.post("/user", (req, res) => {
     userCollection
       .insertOne(req.body)
       .then((result) => {
         console.log(result);
-        res.redirect('/');
+        res.redirect("/");
       })
       .catch((error) => console.log(error));
   });
