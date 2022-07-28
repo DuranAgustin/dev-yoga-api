@@ -94,6 +94,7 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
       .catch((error) => console.log(error));
   });
 
+
   app.delete('/flows/remove:id', (req, res) => {
     flowCollection
       .deleteOne({ _id: ObjectId(req.params.id) })
@@ -107,7 +108,7 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
   app.put('/:id', (req, res, next) => {
     flowCollection
       .findOneAndUpdate(
-        { _id: req.params.id },
+        { _id: ObjectId(req.params.id) },
         {
           $set: {
             title: req.body.title,
