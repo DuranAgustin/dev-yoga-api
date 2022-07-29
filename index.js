@@ -130,7 +130,6 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
         { _id: ObjectId(req.params.id) },
         {
           $set: {
-            title: req.body.title,
             flow: req.body.flow,
           },
         },
