@@ -123,7 +123,8 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
   });
 
   //TODO-build update functionality
-  app.put('/:id', (req, res, next) => {
+  app.put("/flows/update:id", (req, res) => {
+
     flowCollection
       .findOneAndUpdate(
         { _id: ObjectId(req.params.id) },
@@ -134,7 +135,7 @@ MongoClient.connect(CONNECTION_STRING).then(async (client) => {
           },
         },
         {
-          upsert: true,
+          upsert: false,
         }
       )
       .then((result) => res.json('Success'))
